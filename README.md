@@ -1,144 +1,139 @@
 SYSPROF Analyser
 =================
-Analyze SYSPROF V1.1 & V1.3 files and provides computational RAM usage statistics which can be exported to exel for building graphs.
+Analyse SYSPROF V1.1 & V1.3 files and provides computational RAM usage statistics which can be exported to exel for building graphs.
 
 
-  USAGE FOR GENERAL STATISTICS:
+  USAGE (Default statistics)
   -----------------------------
 
   Usage: `./sysprof_anal.sh "filename"`
-```
+``` bash
   Example: ./sysprof_anal.sh sysprof_unitel_sdp_7a.log.sdp1_170730.sysprof
 ```
-  FOR EXACT UNIT OR UNITTYPE:
+  USAGE (For exact clients):
   ---------------------------
 
   Usage: `./sysprof_anal.sh "filename" "SDP client"`
-```
+``` bash
   Example: ./sysprof_anal.sh sysprof_unitel_sdp_7a.log.sdp1_170730.sysprof osa32
   Example: ./sysprof_anal.sh sysprof_unitel_sdp_7a.log.sdp1_170730.sysprof osa
 ```
-  FOR UNIT LOCALHOST PROCESSES:
+  USAGE (Local server processes report):
   -----------------------------
 
   Usage: `./sysprof_anal.sh "filename" "localhost" "local SDP process name"`
-```
+``` bash
   Example: ./sysprof_anal.sh sysprof_unitel_sdp_7a.log.sdp1_170730.sysprof localhost sdsagent
 ```
 
-```
-MacBook-Pro-Philipp:Sysprof_analyse philipp$ ./sysprof_anal_func.sh SYSPROF.sdp1_190904.sysprof notif
+PREREQUISITES:
+---------------
+Before use set correct SYSPROF file version, client_names and local_processes options in _VARS SET BY USER_ script section:
+``` config
+######################
+#  VARS SET BY USER  #  VERIFY and set this BEFORE RUNNING SCRIPT.
+######################
+sysprof_version=1.1 #YOUR SYSPROF VERSION 1.1 or 1.3.
+client_names="osa dslu slu eci notif ofr sapi ajms feadmin sdp" #SDP clients pattern. For func. gen_stat_get()
+local_processes="sdsagent /ure java tsp nsrexecd nsrmmdbd nsrjb clstrmgr nmon topasrec arc gzip /DWH"
+``` 
+
+EXECUTION EXAMPLE:
+-------------------
+
+``` shell **Deafult mode**
+MacBook-Pro-Philipp:Sysprof_analyse philipp$ ./sysprof_anal.sh SYSPROF.sdp1_190903.sysprof
 
 Running for Sysprof version: 1.1
 
-Memory consumption for notif:
-HOSTNAME |0000 |0100 |0200 |0300 |0400 |0550 |0650 |0750 |0850 |0950 |1050 |1150 |1250 |1350 |1450 |     |     |     |     |     |     |     |     |
-notif101 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |13.0 |13.0 |13.0 |13.0 |13.1 |13.1 |13.1 |13.1 |     |     |     |     |     |     |     |     |
-notif102 |12.8 |12.8 |12.8 |12.8 |12.8 |12.9 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |13.0 |13.0 |13.0 |     |     |     |     |     |     |     |     |
-notif1   |12.4 |12.4 |12.4 |12.4 |12.4 |13.0 |13.0 |13.0 |13.0 |13.0 |13.0 |13.0 |13.0 |13.0 |13.0 |     |     |     |     |     |     |     |     |
-notif2   |11.3 |11.3 |11.3 |11.3 |11.3 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |     |     |     |     |     |     |     |     |
-notif3   |11.7 |11.7 |11.7 |11.7 |11.7 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |     |     |     |     |     |     |     |     |
-notif4   |11.7 |11.7 |11.7 |11.7 |11.7 |11.8 |11.8 |11.8 |11.8 |11.8 |12.0 |12.0 |12.0 |12.0 |12.0 |     |     |     |     |     |     |     |     |
-notif5   |11.8 |11.8 |11.8 |11.8 |11.8 |11.7 |11.7 |11.7 |11.7 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |     |     |     |     |     |     |     |     |
-notif6   |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |     |     |     |     |     |     |     |     |
-Execution time: 46 seconds
+Maximum Comp RAM consumption (hourly) by Single URE session for the most heavy loaded SDP Clients (in Megabytes).
+HINT: Average URE session should not consume more than 18Mb RAM.
 
-Total number of external SDP Clients connections for notif:
-HOSTNAME |0000 |0100 |0200 |0300 |0400 |0550 |0650 |0750 |0850 |0950 |1050 |1150 |1250 |1350 |1450 |     |     |     |     |     |     |     |     |
-notif101 |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |     |     |     |     |     |     |     |     |
-notif102 |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |     |     |     |     |     |     |     |     |
-notif1   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |     |     |     |     |     |     |     |     |
-notif2   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |     |     |     |     |     |     |     |     |
-notif3   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |     |     |     |     |     |     |     |     |
-notif4   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |     |     |     |     |     |     |     |     |
-notif5   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |     |     |     |     |     |     |     |     |
-notif6   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |     |     |     |     |     |     |     |     |
-Execution time: 82 seconds
+HOSTNAME |0000 |0100 |0200 |0300 |0400 |0500 |0600 |0700 |0800 |0900 |1000 |1100 |1200 |1300 |1400 |1500 |1600 |1700 |1800 |1900 |2000 |2100 |2200 |2300
+dslu42   |26.8 |26.8 |26.8 |25.7 |34.7 |34.8 |22.7 |22.7 |22.7 |22.7 |22.7 |22.7 |22.7 |22.6 |22.6 |22.6 |22.7 |22.7 |22.7 |22.7 |22.7 |22.7 |22.7 |22.7
+dslu42   |26.8 |26.8 |26.8 |25.7 |34.7 |34.8 |22.7 |22.7 |22.7 |22.7 |22.7 |22.7 |22.7 |22.6 |22.6 |22.6 |22.7 |22.7 |22.7 |22.7 |22.7 |22.7 |22.7 |22.7
+eci115   |22.8 |22.8 |22.8 |26.8 |26.8 |26.9 |17.8 |18.5 |22.4 |21.9 |22.6 |22.7 |22.7 |22.7 |22.8 |22.8 |22.8 |26.8 |26.8 |26.8 |26.8 |26.8 |26.8 |26.8
+notif102 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8
+sapi111  |15.8 |15.8 |15.7 |15.8 |15.4 |15.6 |14.3 |16.7 |16.9 |21.5 |17.9 |21.8 |17.8 |22.0 |17.7 |20.8 |16.9 |17.8 |21.9 |17.1 |15.7 |21.7 |17.1 |15.1
+ajms2    |12.8 |17.2 |17.2 |17.3 |17.3 |17.3 |17.3 |17.3 |17.3 |16.6 |16.8 |12.7 |12.7 |12.9 |12.9 |12.9 |12.9 |12.9 |12.9 |12.9 |12.9 |12.9 |12.9 |13.0
+Execution time: 81 seconds
 
-Summ of RAM consumption by all URE sessions from notif (in Megabytes).
-HOSTNAME |0000 |0100 |0200 |0300 |0400 |0550 |0650 |0750 |0850 |0950 |1050 |1150 |1250 |1350 |1450 |     |     |     |     |     |     |     |     |
-notif101 |83.9 |83.9 |83.9 |83.7 |83.7 |85.3 |85.3 |85.7 |85.8 |86.9 |86.9 |87   |87   |87   |87   |     |     |     |     |     |     |     |     |
-notif102 |82.8 |82.8 |82.8 |82.8 |82.8 |83.6 |83.1 |83.1 |83.1 |83.3 |83.3 |83.3 |84.3 |84.3 |84.3 |     |     |     |     |     |     |     |     |
-notif1   |78.9 |78.9 |78.9 |78.9 |78.9 |83.5 |83.5 |83.5 |83.5 |83.5 |83.5 |83.5 |83.5 |83.5 |83.5 |     |     |     |     |     |     |     |     |
-notif2   |74   |74   |74   |74   |74   |81.9 |81.9 |81.9 |81.9 |81.9 |81.9 |81.9 |81.9 |81.9 |81.9 |     |     |     |     |     |     |     |     |
-notif3   |79.7 |79.7 |79.7 |79.7 |79.7 |82   |82   |82.3 |82.3 |82.3 |82.3 |82.3 |82.3 |82.3 |82.3 |     |     |     |     |     |     |     |     |
-notif4   |79.6 |79.6 |79.6 |79.6 |79.6 |82   |82   |82   |82   |82   |82.5 |82.5 |82.5 |82.5 |82.5 |     |     |     |     |     |     |     |     |
-notif5   |80.2 |80.2 |80.2 |80.2 |80.2 |81.9 |81.9 |81.9 |81.9 |82.3 |82.3 |82.3 |82.3 |82.3 |82.3 |     |     |     |     |     |     |     |     |
-notif6   |79.8 |79.8 |79.8 |79.8 |79.8 |82   |82   |82   |82   |82   |82.3 |82.3 |82.3 |82.3 |82.3 |     |     |     |     |     |     |     |     |
-Execution time: 119 seconds
+Total number of external SDP Clients connections by unittype (in sessions):
+HOSTNAME |0000 |0100 |0200 |0300 |0400 |0500 |0600 |0700 |0800 |0900 |1000 |1100 |1200 |1300 |1400 |1500 |1600 |1700 |1800 |1900 |2000 |2100 |2200 |2300
+dslu42   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14
+dslu42   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14   |14
+eci115   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7
+notif102 |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7
+sapi111  |2    |1    |2    |1    |1    |2    |1    |1    |2    |3    |2    |3    |3    |2    |3    |3    |2    |3    |4    |5    |3    |2    |2    |2
+ajms2    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |1    |2    |1
+Execution time: 154 seconds
+
+Summ of RAM consumption by all URE sessions from single SDP Client(in Megabytes). For top RAM consumenrs only.
+HOSTNAME |0000 |0100 |0200 |0300 |0400 |0500 |0600 |0700 |0800 |0900 |1000 |1100 |1200 |1300 |1400 |1500 |1600 |1700 |1800 |1900 |2000 |2100 |2200 |2300
+dslu42   |239.4|241.8|242.7|246.7|285.9|284.8|264.6|265.2|265.2|266.3|265.9|266.1|267.1|265.9|266.9|265  |268.1|265.8|267  |267  |267.3|265.7|265.8|266
+dslu42   |239.4|241.8|242.7|246.7|285.9|284.8|264.6|265.2|265.2|266.3|265.9|266.1|267.1|265.9|266.9|265  |268.1|265.8|267  |267  |267.3|265.7|265.8|266
+eci115   |116.1|117  |117  |125.3|129.3|133.4|94.4 |97.3 |102.3|110.3|111  |115.7|116.1|115.7|117.1|117.3|117.3|121.3|121.3|121.3|125.4|125.4|133.4|133.4
+notif102 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8
+sapi111  |27.4 |15.8 |28.3 |15.8 |15.4 |27.2 |14.3 |16.7 |31   |50.9 |34.8 |53.8 |46.5 |34.4 |45.7 |50.3 |30.6 |44.5 |66.6 |71   |42.6 |36.8 |32.3 |26.7
+ajms2    |12.8 |17.2 |17.2 |17.3 |17.3 |17.3 |17.3 |17.3 |17.3 |16.6 |16.8 |12.7 |12.7 |12.9 |12.9 |12.9 |12.9 |12.9 |12.9 |12.9 |12.9 |12.9 |24.5 |13
+Execution time: 225 seconds
+
+Total memory consumption by internal SDP process (in Megabytes):
+HOSTNAME |0000 |0100 |0200 |0300 |0400 |0500 |0600 |0700 |0800 |0900 |1000 |1100 |1200 |1300 |1400 |1500 |1600 |1700 |1800 |1900 |2000 |2100 |2200 |2300
+ure      |439.3|1563.|1618.|445.4|445.4|445.4|445.4|445.4|445.4|446.3|446.3|446.3|446.9|447  |448.1|448.2|448.2|448.2|448.2|450.1|450.1|450.1|450.1|450.1
+java     |261.7|261.9|261.9|140.6|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9|261.9
+tsp      |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4  |9.4
+nsrexecd |61.5 |61.5 |61.5 |62.2 |62.7 |62.7 |62.7 |62.9 |62.9 |62.9 |62.9 |62.9 |62.9 |62.9 |62.9 |62.9 |62.9 |62.9 |62.9 |62.9 |62.9 |62.9 |63   |63.1
+nsrmmdbd |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9 |22.9
+nsrjb    |4.3  |5.5  |5.4  |4.3  |5.4  |4.4  |4.3  |4.3  |4.3  |4.2  |     |     |     |     |     |     |     |     |     |     |     |     |     |
+clstrmgr |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38   |38
+topas_nmo|94.5 |91.3 |91.4 |91.4 |91.4 |91.4 |91.4 |91.4 |91.4 |91.4 |91.4 |91.4 |91.4 |91.4 |93.8 |93.8 |93.8 |93.8 |91.4 |91.4 |91.4 |91.4 |91.4 |91.4
+topasrec |127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3|127.3
+ora_arc5_|44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9 |44.9
+gzip     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+Execution time: 287 seconds
 MacBook-Pro-Philipp:Sysprof_analyse philipp$
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Usage: 
-------
 ``` shell
-aix_load "hostname" _(based on your /etc/hosts)_
-```
+MacBook-Pro-Philipp:Sysprof_analyse philipp$ ./sysprof_anal.sh SYSPROF.sdp1_190903.sysprof notif
 
-Example for single server:
+Running for Sysprof version: 1.1
 
-``` shell
-aix_load sdp7a
-```
+Memory consumption on SDP by single notif client connection:
+HOSTNAME |0000 |0100 |0200 |0300 |0400 |0500 |0600 |0700 |0800 |0900 |1000 |1100 |1200 |1300 |1400 |1500 |1600 |1700 |1800 |1900 |2000 |2100 |2200 |2300
+notif101 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8
+notif102 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8 |12.8
+notif1   |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4 |12.4
+notif2   |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3 |11.3
+notif3   |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7
+notif4   |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7 |11.7
+notif5   |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8
+notif6   |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8 |11.8
+Execution time: 111 seconds
 
-Example for multiple servers: 
-``` shell
-aix_load sdp
-```
+Total number of external SDP Clients connections from notif:
+HOSTNAME |0000 |0100 |0200 |0300 |0400 |0500 |0600 |0700 |0800 |0900 |1000 |1100 |1200 |1300 |1400 |1500 |1600 |1700 |1800 |1900 |2000 |2100 |2200 |2300
+notif101 |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7
+notif102 |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7
+notif1   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7
+notif2   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7
+notif3   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7
+notif4   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7
+notif5   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7
+notif6   |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7    |7
+Execution time: 211 seconds
 
-Legend:
--------
-
- * **HOST** - Server hostname
- * **EXEC TIME** - Server local time, when performance information was requested
- * **HW TYPE** - Server hardware type
- * **THREADS** - Number of virtual processors (CPU threads). Used for max IOWAIT and RUNQ cacluation
- * **RUNQ** - Shows the number of tasks executing and waiting for CPU resources. When this number exceeds the number of THREADS on the server - a CPU bottleneck exists
- * **BLKQ** - Shows the number of tasks blocked to execution. If this value is higher then 2 and RUNQ is high - you probably have problems
- * **CPU IDLE** - Server CPU idle cycles (Higher is better)
- * **CPU USER** - Server CPU users cycles (Lower is better)
- * **CPU SYSTEM** - Server CPU system cycles (Lower is better)
- * **COMP RAM** - Percentage of Server computational RAM (MAX alloved - 90)
- * **IOWAIT** - Percentage of time the CPU is idle AND there is, at least, one I/O in progress. Depends from performance of server's storage. Iowait more 25 - system is probably IO bound
- * **IS DISK LOAD** - Indicates current Server disks load status (Should be NO)
- * **LOADED DISKS** - Server most loaded discs. Shows diskname and tm_act percentage. Percent of time the device was active (we can see if disk load is balanced correctly or not, 1 used heavily others - not. 100 means disks always was busy when requested statistics. On some SDPs it can reach 260, bue to mirriring configuration.)
-
- Sample output:
- ---------------
-``` shell
-CELCO:[root@upm1 scripts]# aix_load sdp
-HOST |EXEC TIME|HW TYPE|THREADS|RUNQ|BLKQ|CPU IDLE|CPU USER|CPU SYSTEM|COMP RAM|IOWAIT|IS DISK LOAD|LOADED DISKS                  
-sdp1 |17:18:28 |POWER5 |16     |8   |1   |43      |41      |13        |74.8    |2.5   |NO          |NO LOADED DISKS               
-sdp2 |17:18:31 |POWER7 |32     |5   |1   |49      |34      |12        |72.3    |1.8   |NO          |NO LOADED DISKS               
-sdp3 |17:18:33 |POWER7 |32     |8   |1   |42      |40      |15        |75.0    |3.1   |NO          |NO LOADED DISKS               
-sdp4 |17:18:35 |POWER5 |16     |5   |1   |30      |54      |14        |59.2    |1.0   |NO          |NO LOADED DISKS               
-sdp5 |17:18:37 |POWER5 |16     |7   |1   |60      |28      |7         |71.4    |3.5   |NO          |NO LOADED DISKS               
-sdp6 |17:18:41 |POWER5 |16     |7   |1   |47      |38      |13        |62.1    |2.8   |DISKS LOAD  |hdisk28 100.0,hdisk29 95.0,hdisk73 94.7,hdisk72 100.0,
-sdp7 |17:18:43 |POWER5 |16     |7   |1   |55      |32      |7         |72.6    |4.9   |NO          |NO LOADED DISKS               
-sdp8 |17:18:47 |POWER7 |32     |6   |1   |60      |27      |8         |72.8    |1.7   |NO          |NO LOADED DISKS 
-CELCO:[root@upm1 scripts]# 
+Summ of RAM consumption by all URE sessions opened from notif external SDP clients (in Megabytes).
+HOSTNAME |0000 |0100 |0200 |0300 |0400 |0500 |0600 |0700 |0800 |0900 |1000 |1100 |1200 |1300 |1400 |1500 |1600 |1700 |1800 |1900 |2000 |2100 |2200 |2300
+notif101 |83.8 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9 |83.9
+notif102 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8 |82.8
+notif1   |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9 |78.9
+notif2   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74   |74
+notif3   |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7 |79.7
+notif4   |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6 |79.6
+notif5   |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2 |80.2
+notif6   |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8 |79.8
+Execution time: 312 seconds
+MacBook-Pro-Philipp:Sysprof_analyse philipp$
 ```

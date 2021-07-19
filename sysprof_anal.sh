@@ -110,15 +110,15 @@ if [ ! -n "$2" ]; then  #If arguments for unittype ($2 aka $exact_unit) not pass
 	printf "\n${bold}${lime_yellow}Total memory consumption by internal SDP process (in Megabytes):${normal}\n";
 			gen_stat_get echo"($local_processes)" "awk -F '|' '{total += \$3} END {print total}'|cut -c1-5|tr -d ' '" "_local"
 else
-	if [ ! -n "$exact_local_process" ]; then #If arguments for unittype ($2 aka $exact_unit) is passed.
+	if [ -n "$2" ] && [ ! -n "$exact_local_process" ]; then #If arguments for unittype ($2 aka $exact_unit) is passed but $3 (localhost process) is not.
 		printf "\n${bold}${lime_yellow}Memory consumption on SDP by single $exact_unit client connection:${normal}\n"; 
-        exact_unit_stat_get "awk -F '|' '{print \$3}'|cut -c1-5|sort -n|tail -1|tr -d ' '|tr -d '\n'" 
+       exact_unit_stat_get "awk -F '|' '{print \$3}'|cut -c1-5|sort -n|tail -1|tr -d ' '|tr -d '\n'" 
 
 		printf "\n${bold}${lime_yellow}Total number of external SDP Clients connections from $exact_unit:${normal}\n";
-		exact_unit_stat_get "wc -l |tr -d ' '|tr -d '\n'" 
+			exact_unit_stat_get "wc -l |tr -d ' '|tr -d '\n'" 
 	
 		printf "\n${bold}${lime_yellow}Summ of RAM consumption by all URE sessions opened from $exact_unit external SDP clients (in Megabytes).${normal}\n";
-		exact_unit_stat_get "awk -F '|' '{total += \$3} END {print total}'|cut -c1-5|tr -d ' '" 
+			exact_unit_stat_get "awk -F '|' '{total += \$3} END {print total}'|cut -c1-5|tr -d ' '" 
 	
 	else
 	#FOR UNIT LOCALHOST PROCESSES. TBD.

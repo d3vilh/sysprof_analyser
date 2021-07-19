@@ -1,5 +1,5 @@
 #!/bin/bash
-# SYSPROF ANALYZER V.1.0 by Philipp Shilov 06.11.2018
+# SYSPROF ANALYZER V.1.0.1 by Philipp Shilov 06.11.2018
 # prev day from SDP:  ./sysp_an.sh `ls -lrt *.sysprof | tail -2 |head -1 | awk '{print $9}'` dslu
 bold=$(tput bold); blue=$(tput setaf 4); normal=$(tput sgr0); black=$(tput setaf 0); red=$(tput setaf 1); green=$(tput setaf 2); yellow=$(tput setaf 3); lime_yellow=$(tput setaf 190); powder_blue=$(tput setaf 153); magenta=$(tput setaf 5); cyan=$(tput setaf 6); white=$(tput setaf 7); bright=$(tput bold); blink=$(tput blink); reverse=$(tput smso); underline=$(tput smul);
 function help_me_please {
@@ -40,8 +40,8 @@ if [ $sysprof_version = "1.1" ]; then
 	cat $file_init| grep -v oraclemain| awk -F '|' '{print $1"|"$6"|"$3}'|grep -v "||" | grep -v localhost > /tmp/megafile_local
 else
 	printf "\nRunning for Sysprof version: ${bold}${lime_yellow}1.3${normal}\n";
-	cat $file_init| awk -F '|' '{print $1"|"$10"|"$6}'|grep -v "||" | grep -v localhost > /tmp/megafile.txt
-	cat $file_init| grep localhost| awk -F '|' '{print $1"|"$9"|"$6}'|grep -v "||" | grep -v localhost > /tmp/megafile_local.txt
+	cat $file_init| awk -F '|' '{print $1"|"$10"|"$6}'|grep -v "||" | grep -v localhost > /tmp/megafile
+	cat $file_init| grep localhost| awk -F '|' '{print $1"|"$9"|"$6}'|grep -v "||" | grep -v localhost > /tmp/megafile_local
 fi;
 
 # Array with full timeline from 0000 to 2355:

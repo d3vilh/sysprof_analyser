@@ -1,5 +1,5 @@
 #!/bin/bash
-# SYSPROF ANALYZER V.1.0.1 by Philipp Shilov 06.11.2018
+# SYSPROF ANALYZER V.1.0.2 by Philipp Shilov 06.11.2018
 # prev day from SDP:  ./sysp_an.sh `ls -lrt *.sysprof | tail -2 |head -1 | awk '{print $9}'` dslu
 bold=$(tput bold); blue=$(tput setaf 4); normal=$(tput sgr0); black=$(tput setaf 0); red=$(tput setaf 1); green=$(tput setaf 2); yellow=$(tput setaf 3); lime_yellow=$(tput setaf 190); powder_blue=$(tput setaf 153); magenta=$(tput setaf 5); cyan=$(tput setaf 6); white=$(tput setaf 7); bright=$(tput bold); blink=$(tput blink); reverse=$(tput smso); underline=$(tput smul);
 function help_me_please {
@@ -21,7 +21,7 @@ if [ ! -n "$1" ]; then help_me_please; exit; fi; #Help information
 #  VARS SET BY USER  #  VERIFY and set this BEFORE RUNNING SCRIPT.
 ######################
 sysprof_version=1.1 #YOUR SYSPROF VERSION 1.1 or 1.3.
-client_names="osa dslu slu eci notif ofr sapi ajms feadmin sdp" #SDP clients pattern. For func. gen_stat_get()
+client_names="osa dslu |slu eci notif ofr sapi ajms feadmin sdp" #SDP clients pattern. For func. gen_stat_get() #slu has | it is WA, keep it :)
 local_processes="sdsagent /ure java tsp nsrexecd nsrmmdbd nsrjb clstrmgr nmon topasrec arc gzip /DWH"
 
 ######################
@@ -70,11 +70,11 @@ function gen_stat_get {  #If arguments for unittype ($2 aka $exact_unit) is pass
 	filef="$file$3" #/tmp/megafile or /tmp/megafile_local
 	# Sorting out the most consumed ure sessions and finding top 10 units from this sorted list, then gets first unit from this ten.
 	for units in $1; do
-		array_units=( $(grep $units $filef | awk -F '|' '{print $3,$2}' | sort -n | awk '!seen[$0]++' | tail -10 -r |awk '{print $2}'| awk '!seen[$0]++' | head -1) );
+		array_units=( $(grep "$units" $filef | awk -F '|' '{print $3,$2}' | sort -n | awk '!seen[$0]++' | tail -10 -r |awk '{print $2}'| awk '!seen[$0]++' | head -1) );
 			for every_unit in "${array_units[@]}"; do
 				if [ ! -z "$every_unit" ]; then 																										#awk ‘{print $(NF)}’
 					printf "%-9s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s|%-5s\n" `echo $every_unit | awk -F "/" '{print $NF}'|cut -c1-9` `for every_hour in "${array_hours[@]}"; do     
-					echo "$(eval "grep $units $filef |grep $filedate$every_hour|grep $every_unit |"$2)"; done`;
+					echo "$(eval "grep \"$units\" $filef |grep $filedate$every_hour|grep $every_unit |"$2)"; done`;
 				fi;
 			done;
 	done

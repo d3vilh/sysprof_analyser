@@ -2,6 +2,7 @@ SYSPROF Analyser
 =================
 Analyse SYSPROF V1.1 & V1.3 files and provides computational RAM usage statistics which can be exported to exel for building graphs.
 
+Very last update is **sysprof_anal_ss.sh** script, designed for Slow Storage servers. All sorting operations done in RAM. If you have SSD storage with fast I/O operations dont use SS version.
 
   USAGE (Default statistics)
   -----------------------------
